@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<bt_xml xmlns="http://www.ros.org/rosplan">
+
+  <root>
+    <!-- Start of the navigation tree -->
+    <sequence name="NavigateToPose">
+    <plugin_lib plugin="nav2_compute_offset_pose_action_bt_node"/>
+
+      <!-- 1. Compute offset to adjust goal -->
+      <action name="ComputeOffsetPose" goal="{goal}" offset="1.0" offset_pose="{offset_goal}"/>
+
+      <!-- 2. Compute Path to Pose -->
+      <action name="ComputePathToPose" goal="{offset_goal}" path="{path}" planner_id="SmacPlanner"/>
+
+      <!-- 3. Follow the computed path -->
+      <action name="FollowPath" path="{path}"/>
+
+      <!-- 4. Handle recovery if stuck -->
+      <action name="BackUp" />
+
+      <!-- 5. Success if goal reached -->
+      <condition name="GoalReachedCondition" goal_reached="{goal_reached}"/>
+    </sequence>
+
+  </root>
+</bt_xml>
